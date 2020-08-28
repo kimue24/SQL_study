@@ -1,0 +1,27 @@
+--테이블 구성 살펴보기
+DESC EMP;
+
+DESC DEPT;
+
+DESC SALGRADE;
+
+-- *로 테이블 전체 출력하기
+SELECT * FROM EMP;
+
+--열로 쉼표 구분하여 출력하기
+SELECT EMPNO,ENAME,DEPTNO
+FROM EMP;
+
+--DISTINCT로 열의 중복 제거하기
+SELECT DISTINCT DEPTNO
+FROM EMP;
+
+--여러 개 열을 명시하여 중복 제거하기
+SELECT DISTINCT JOB,DEPTNO
+FROM EMP;
+
+--직책 부서 출력하기 ALL 사용
+SELECT ALL JOB,DEPTNO
+FROM EMP;
+
+--
