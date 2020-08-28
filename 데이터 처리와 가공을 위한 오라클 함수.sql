@@ -1,0 +1,81 @@
+
+--대 소문자를 바꿔주는 UPPER,LOWER,INITCAP 함수
+SELECT ENAME,UPPER(ENAME),LOWER(ENAME),INITCAP(ENAME)
+FROM EMP;
+
+-- UPPER 함수로 문자열 비교하기(사원 이름이 SCOTT인 데이터 찾기
+SELECT *
+FROM EMP
+WHERE UPPER(ENAME) = 'SCOTT';
+
+--UPPER 함수로 문자열 비교하기 (사원 이름에 SCOTT가 포함된 데이터 찾기)
+SELECT *
+FROM EMP
+WHERE UPPER(ENAME) LIKE '%SCOTT%';
+
+--선택한 열의 문자열 길이 구하기
+SELECT ENAME, LENGTH(ENAME)
+FROM EMP;
+
+--사원 이름의 길이가 5 이상인 행 출력하기
+SELECT ENAME,LENGTH(ENAME)
+FROM EMP
+WHERE LENGTH(ENAME) >= 5;
+
+--LENGTH 함수와 LENGTHB('한글')
+SELECT LENGTH('한글'),LENGTHB('한글')
+FROM DUAL;
+
+--SUBSTR함수
+SELECT JOB,SUBSTR(JOB,1,2),SUBSTR(JOB,3,2),SUBSTR(JOB,5)
+FROM EMP;
+
+--예제
+SELECT SUBSTR(ENAME,3)
+FROM EMP;
+
+--SUBSTR 함수 안에 다른 함수 함께 사용하기
+
+SELECT JOB,
+        SUBSTR(JOB, -LENGTH(JOB)),
+        SUBSTR(JOB, -LENGTH(JOB),2),
+        SUBSTR(JOB, -3)
+        FROM EMP;
+        
+ -- INSTR 함수로 문자열 데이터에서 특정 문자열 찾기
+ SELECT INSTR('HELLO,ORACLE!', 'L') AS INSTR_1,
+        INSTR('HELLO,ORACEL!', 'L',5) AS INSTR_2,
+        INSTR('HELLO,ORACLE!', 'L',2,2) AS INSTR_3
+        FROM DUAL;
+        
+-- INSTR 함수로 사원 이름에 문자 S가 있는 행 구하기
+SELECT *
+FROM EMP
+WHERE INSTR(ENAME,'S') >0;
+
+--LIKE 연산자로 사원 이름에 문자 S 가 있는 행 구하기
+SELECT *
+FROM EMP
+WHERE ENAME LIKE '%S%';
+
+--REPLACE 함수
+SELECT '010-9999-9999' AS REPLACE_BEFORE,
+        REPLACE('010-9999-9999','-',' ') AS REPLACE_1,
+        REPLACE('010-9999-9999','-') AS REPLACE_2
+        FROM DUAL;
+
+--데이터의 빈 공간을 특정 문자로 채우는 LPAD,RPAD 함수
+
+SELECT 'ORACLE',
+    LPAD('ORACLE',10,'#') AS LPAD_1,
+    RPAD('ORACLE',10,'*') AS RPAD_1,
+    LPAD('ORACLE',10) AS LPAD_2,
+    RPAD('ORACLE',10) AS RPAD_2
+    FROM DUAL;
+    
+--PRAD 함수를 사용하여 개인정보 뒷자리를 *로만들기
+
+SELECT 
+       RPAD('910413-',14,'*') AS PRAD_JMNO,
+       RPAD('010-4311-',13,'*') AS PRAD_PHONE
+       FROM DUAL;
