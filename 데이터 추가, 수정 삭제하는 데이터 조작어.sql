@@ -1,0 +1,341 @@
+--테이블에 데이터 추가하기
+
+-- DEPT 테이블 복사해서 DEPT_TEMP테이블만들기
+CREATE TABLE DEPT_TEMP
+AS SELECT * FROM DEPT;
+
+--FRPT_TEMP 테이블 전체 열 조회하기
+SELECT * FROM DEPT_TEMP;
+
+--DEPT_TEMP 테이블에 데이터 추가하기
+
+INSERT INTO DEPT_TEMP (DEPTNO, DNAME,LOC)
+                VALUES (50, 'DATABASE','SEOUL');
+
+--DEPT_TEMP 추가된 데이터 확인하기
+
+SELECT * FROM DEPT_TEMP;
+
+--INSERT문에 열 지정 없이 데이터 추가하기
+INSERT INTO DEPT_TEMP
+        VALUES(60,'NETWORK','BUSAN');
+        
+--결과
+SELECT * FROM DEPT_TEMP;
+
+--테이블 NULL 데이터 입력하기
+
+INSERT INTO DEPT_TEMP (DEPTNO, DNAME,LOC)
+            VALUES ( 70,'WEB',NULL);
+
+SELECT * FROM DEPT_TEMP;
+        
+--빈 공백 문자열로 NULL을 입력하기
+
+INSERT INTO DEPT_TEMP(DEPTNO,DNAME,LOC)
+            VALUES( 80,'MOBILE','');
+
+SELECT * FROM DEPT_TEMP;
+
+--열 데이터를 넣지 않는 방식으로 NULL' 데이터 입력하기
+
+INSERT INTO DEPT_TEMP(DEPTNO, LOC)
+            VALUES (90, 'INCHEON');
+            
+SELECT * FROM DEPT_TEMP;
+
+-- 테이블의 날짜 데이터 입력하기 , DROP 테이블 후 재시도
+
+DROP TABLE EMP_TEMP;
+
+CREATE TABLE EMP_TEMP
+AS SELECT * 
+FROM EMP
+WHERE 1<> 1;
+
+SELECT * FROM EMP_TEMP;
+
+INSERT INTO EMP_TEMP(EMPNO, ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO)
+                VALUES(9999,'홍길동','PRESIDENT',NULL,'2001/01/01',
+                    5000,1000,10);
+
+SELECT * FROM EMP_TEMP;
+
+--날짜 데이터 다른 방식으로 INSERT하기
+
+INSERT INTO EMP_TEMP (EMPNO, ENAME,JOB,MGR,HIREDATE,SAL,COMM, DEPTNO)
+       VALUES  ( 1111,'성춘향','MANAGER',9999,'2001-01-05',40000,NULL,20);
+
+SELECT * FROM EMP_TEMP;
+
+--날짜 데이터 형식을 반대로 했을때 ( 오류!)
+
+INSERT INTO EMP_TEMP(EMPNO, ENAME, JOB, MGR, HIREDATE,SAL,COMM,DEPTNO)
+VALUES (2111,'이순신','MANAGER',9999,'07/01/2001', 4000, NULL,20);
+
+
+INSERT INTO EMP_TEMP (EMPNO,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO)
+                VALUES (2111, '이순신','MANAGER', 9999, TO_DATE('07/01/2001', 'DD/MM/YYYY'),
+                4000,NULL,20);
+
+SELECT * FROM EMP_TEMP;
+
+--SYSDATE를 사용하여 날짜 데이터 입력하기
+
+INSERT INTO EMP_TEMP (EMPNO,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO)
+                VALUES (3111, '심청이','MANAGER',9999,SYSDATE,4000,NULL,30);
+ 
+SELECT * FROM EMP_TEMP;               
+
+
+
+--서브쿼리로 여러 데이터 추가하기
+
+INSERT INTO EMP_TEMP (EMPNO,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO)
+SELECT E.EMPNO, E.ENAME, E.JOB, E.MGR, E.HIREDATE, E.SAL, E.COMM, E.DEPTNO
+FROM EMP E, SALGRADE S 
+WHERE E.SAL BETWEEN S.LOSAL AND S.HISAL
+AND S.GRADE = 1;
+
+SELECT * FROM EMP_TEMP;
+
+
+--테이블에 있는 데이터 수정하기
+
+CREATE TABLE DEPT_TEMP2
+ AS SELECT * FROM DEPT;
+
+UPDATE DEPT_TEMP2
+SET DNAME = 'DATABASE',
+LOC = 'SEOUL'
+WHERE DEPTNO = 40;
+
+SELECT * FROM DEPT_TEMP2;
+
+UPDATE DEPT_TEMP2
+    SET (DNAME,LOC) = (SELECT DNAME, LOC
+                        FROM DEPT
+                        WHERE DEPTNO = 40)
+WHERE DEPTNO = 40;
+
+--조회
+SELECT * FROM DEPT_TEMP2;                       
+
+
+--서브쿼리로 데이터 일부분 수정하기
+
+UPDATE DEPT_TEMP2
+SET DNAME = (SELECT DNAME
+            FROM DEPT
+            WHERE DEPTNO =40),
+            
+     LOC = (SELECT LOC
+            FROM DEPT
+            WHERE DEPTNO = 40)
+            WHERE DEPTNO =40;
+
+SELECT * FROM DEPT_TEMP2;
+
+--UPDATE문의 WHERE절에 서브쿼리 사용하기
+
+UPDATE DEPT_TEMP2
+SET LOC = 'SEOUL'
+WHERE DEPTNO = (SELECT DEPTNO 
+                FROM DEPT_TEMP
+                WHERE DNAME = 'OPERATIONS');
+
+SELECT * FROM DEPT_TEMP2;
+
+--데이터 삭제하기
+
+CREATE TABLE EMP_TEMP2
+AS SELECT * FROM EMP;
+
+SELECT * FROM EMP_TEMP2;
+
+DELETE FROM EMP_TEMP2
+WHERE JOB ='MANAGER';
+
+SELECT * FROM EMP_TEMP2;
+
+--WHERE절에 서브쿼리를 사용하여 데이터 일부만 삭제하기
+
+DELETE FROM EMP_TEMP2
+    WHERE EMPNO IN (SELECT E.EMPNO
+                    FROM EMP_TEMP2 E, SALGRADE S
+                    WHERE E.SAL BETWEEN S.LOSAL AND S.HISAL
+                    AND S.GRADE =3
+                    AND DEPTNO = 30);
+
+SELECT * FROM EMP_TEMP2;
+
+--데이터 전체 삭제하기
+
+DELETE FROM EMP_TEMP2;
+
+SELECT * FROM EMP_TEMP2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
