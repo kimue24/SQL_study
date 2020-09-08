@@ -5,9 +5,94 @@ SELECT * FROM DICTIONARY;
 SELECT TABLE_NAME
 FROM USER_TABLES;
 
+--SCOTT 계정을 가지고 있는 객체 정보 살펴보기(USER_접두어 사용)
 SELECT OWNER, TABLE_NAME
 FROM ALL_TABLES;
 
 --SCOTT 계정으로 DBA_접두어 사용하기
 SELECT * FROM DBA_TABELS;
 
+--SCOTT 계정이 사용할 수 있는 객체 살펴보기
+SELECT OWNER, TABLE_NAME
+FROM ALL_TABLES;
+
+--SCOTT 계정으로 DBA_접두어 사용하기
+
+SELECT * FROM DBA_TABLES;
+
+--SYSTEM 계정으로 DBA_ 접두어 사용하기 (SYSTEM 계정으로 접속했을 때(오류)
+SELECT * FROM DBA_TABLES;
+
+--SCOTT 계정이 소유한 인덱스 정보 알아보기(SCOTT 계정일때)
+SELECT *
+FROM USER_INDEXES;
+
+--SCOTT 계정이 소유한 인덱스 컬럼 정보 알아보기(SCOTT 계정일때)
+SELECT * 
+FROM USER_IND_COLUMNS;
+
+--EMP 테이블의 SAL 열에 인덱스를 생성하기
+CREATE INDEX IDX_EMP_SAL
+ON EMP(SAL);
+
+--생성 인덱스 확인
+SELECT * FROM USER_IND_COLUMNS;
+
+--인덱스 삭제
+DROP INDEX IDX_EMP_SAL;
+
+--생성된 인덱스 살펴보기
+
+SELECT * FROM USER_IND_COLUMNS;
+
+CREATE VIEW VW_EMP20
+AS (SELECT EMPNO, ENAME, JOB, DEPTNO
+    FROM EMP
+    WHERE DEPTNO =20);
+    
+    SELECT * FROM USER_VIEWS;
+ -- 생성한 뷰 조회하기
+ SELECT *
+ FROM VW_EMP20;
+ 
+ -- 뷰 삭제
+ 
+DROP VIEW VW_EMP20;
+
+-- 뷰 삭제 이후 뷰가 존재하지 않습니다.
+
+SELECT *
+FROM VW_EMP20;
+
+SELECT ROWNUM, E.*
+FROM EMP E;
+
+--EMP 테이블을 SAL 열 기준으로 정렬하기
+
+SELECT ROWNUM, E.*
+FROM EMP E
+ORDER BY SAL DESC;
+-- 인라인 뷰
+SELECT ROWNUM, E.*
+FROM (SELECT * 
+        FROM EMP E
+        ORDER BY SAL DESC) E;
+        
+--인라인 뷰(WITH절 사용)
+WITH E AS (SELECT * FROM EMP ORDER BY SAL DESC)
+SELECT ROWNUM, E.*
+FROM E;
+
+--인라인 뷰로 TOP-N 추출하기(서브쿼리 사용)
+SELECT ROWNUM, E.*
+FROM (SELECT *
+        FROM EMP E
+        ORDER BY SAL DESC) E
+        WHERE ROWNUM <=3;
+        
+--인라인 뷰로 TOP_N 추출하기(WITH절 사용)
+WITH E AS (SELECT * FROM EMP ORDER BY SAL DESC)
+SELECT ROWNUM, E.*
+FROM E
+WHERE ROWNUM <=3;
+--PAGE 349
