@@ -1,0 +1,14 @@
+-- DISTINCT로 열 중복 제거하기
+
+SELECT DISTINCT DEPTNO
+FROM EMP;
+
+--DISTINCT로 열 중복 제거하기(열이 여러개인 경우)
+
+SELECT DISTINCT JOB,DEPTNO
+FROM EMP;
+
+--ALL로 중복되는 열 제거 없이 그대로 출력하기
+
+SELECT ALL JOB,DEPTNO
+FROM EMP;
